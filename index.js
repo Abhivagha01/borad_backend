@@ -1,12 +1,12 @@
 require('dotenv').config();
 const express = require('express');
-const MongooseConnect = require('./Connfig/Db');
 const { UserRouter } = require('./Routes/User');
+const {connectToMongoDB} =require('./Connfig/Db')
 const app = express();
-var cors = require('cors')
+var cors = require('cors');
 
 
-MongooseConnect();
+connectToMongoDB();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
