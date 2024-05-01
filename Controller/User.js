@@ -3,12 +3,6 @@ const User = require('../Models/User')
 async function CreatedInquiry(req, res) {
     try {
         const payload = req.body;
-        const existingUser = await User.findOne({ email: payload.email }).exec(); // Use exec() for better error handling.
-        if (existingUser) {
-            return res.status(409).send({
-                message: "Inquiry already submitted for this email!"
-            });
-        }
         const newUser = await User.create(payload);
         res.status(201).send({
             message: "Inquiry Submitted Successfully!",
