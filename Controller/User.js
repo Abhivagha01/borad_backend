@@ -1,19 +1,28 @@
 const User = require('../Models/User')
 
 async function CreatedInquiry(req, res) {
-    const payload = req.body
-    const existingUser = await User.findOne({ email: payload.email });
-    if (existingUser) {
-        return res.status(409).send({
-            message: "Inquiry already submitted for this email!"
-        })
+    try {
+        const payload = req.body;
+        const existingUser = await User.findOne({ email: payload.email });
+        if (existingUser) {
+            return res.status(409).send({
+                message: "Inquiry already submitted for this email!"
+            });
+        }
+        const newUser = await User.create(payload);
+        res.status(201).send({
+            message: "Inquiry Submitted Successfully!",
+            user: newUser
+        });
+    } catch (error) {
+        console.error('Failed to handle inquiry:', error);
+        res.status(500).send({
+            message: 'Server error while creating inquiry',
+            error: error.message
+        });
     }
-    const newUser = await User.create(payload);
-    res.status(201).send({
-        message: "Inquiry Submitted Succesfully!",
-        user: newUser
-    });
 }
+
 
 async function GetAllInquiry(req, res) {
     const page = parseInt(req.query.page) || 1;
